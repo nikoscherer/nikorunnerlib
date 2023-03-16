@@ -16,8 +16,8 @@ public class Vector2d {
         this.x = x;
     }
 
-    /** Sets the x value for this vector.
-     * @param x
+    /** Sets the y value for this vector.
+     * @param y
      */
     public void setY(double y) {
         this.y = y;
@@ -26,7 +26,7 @@ public class Vector2d {
     /** Sets the x and y values for this vector.
      * @param x
      */
-    public void updateVector(double x, double y) {
+    public void setXY(double x, double y) {
         this.x = x;
         this.y = y;
     }
