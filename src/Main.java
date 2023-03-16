@@ -1,7 +1,7 @@
 public class Main {
     
     public static void main(String args[]) {
-
+/* 
         Vector2d startPose = new Vector2d(0, 0);
 
         Trajectory traj = new Trajectory.TrajectoryBuilder(startPose)
@@ -13,6 +13,10 @@ public class Main {
             new Rotation2d(Math.toRadians(90)), 
             new Vector2d(5, 0),
             new Rotation2d(Math.toRadians(-90))
-        );
+        );*/
+
+        for (int i = 0; i < 2 + 1; i++) {
+            System.out.println(i);
+        }
     }
 }
