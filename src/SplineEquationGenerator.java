@@ -8,48 +8,33 @@ public class SplineEquationGenerator {
         Vector2d startTangentVector = calculateTangentVector(startVector, startTangent, tanDistance);
         Vector2d endTangentVector = calculateTangentVector(endVector, endTangent, tanDistance);
 
-        lerp(startVector, endVector, startTangentVector, endTangentVector);
+        lerp(startVector, startTangentVector, endVector, endTangentVector);
     }
 
     public void lerp(Vector2d startVector, Vector2d startTangent, Vector2d endVector, Vector2d endTangent) {
 
-        double lerpMultiplier = .25;
+        double lerpMultiplier = .1;
         int points = 4;
 
-        System.out.println("Start Tangent /n X:"
+        System.out.println("Start Tangent \n X:"
                 + startTangent.getX() +
-                "/nY:" + startTangent.getY());
-        System.out.println("End Tangent /n X:"
+                "\n Y:" + startTangent.getY());
+        System.out.println("End Tangent \n X:"
                 + endTangent.getX() +
-                "/nY:" + endTangent.getY());
+                "\n Y:" + endTangent.getY());
 
-        // double X = (1−t)3P1 + 3(1−t)2tP2 +3(1−t)t2P3 + t3P4
-
+        System.out.println("Spline Coordinates: ");
         for (double t = 0; !(t >= 1); t = t + lerpMultiplier) {
 
-            System.out.println("X" +
-                    ((Math.pow(1 - t, 3) * startVector.getX())
-                            + ((3 * (1 - t) * Math.sqrt(t)) * startTangent.getX())
-                            + Math.pow(t, 3) * endTangent.getX())
-                    + " Y" + ((Math.pow(1 - t, 3) * startVector.getY())
-                            + ((3 * (1 - t) * Math.sqrt(t)) * startTangent.getY())
-                            + Math.pow(t, 3) * endTangent.getY()));
+            System.out.println(
+                "X: " +
+                    ((Math.pow(1 - t, 3) * startVector.getX()) + (3 * Math.pow(1 - t, 2) * t * startTangent.getX()) + ((3 * (1-t) * Math.pow(t, 2) * endVector.getX())) + (Math.pow(t, 3) * endTangent.getX()))
+                + " Y: " +
+                    ((Math.pow(1 - t, 3) * startVector.getY()) + (3 * Math.pow(1 - t, 2) * t * startTangent.getY()) + ((3 * (1-t) * Math.pow(t, 2) * endVector.getY())) + (Math.pow(t, 3) * endTangent.getY()))
+                );
         }
-
     }
 
-    /**
-     * 
-     * @param initialVector
-     * @param endVector
-     * @return returns the lerp vector
-     */
-
-    public Vector2d calculateQuarticLerpVector(Vector2d initialVector, Vector2d endVector) {
-        Vector2d lerpVector = new Vector2d(0, 0);
-        // a
-        return lerpVector;
-    }
 
     /**
      * @param initialVector
@@ -59,13 +44,13 @@ public class SplineEquationGenerator {
      */
     public Vector2d calculateTangentVector(Vector2d initialVector, Rotation2d rotation, double distance) {
         Vector2d tangentVector = new Vector2d(
-                ((distance * Math.cos(rotation.getRotRAD()))
-                        + (distance * Math.sin(rotation.getRotRAD()))),
-                ((distance * Math.sin(rotation.getRotRAD())
-                        - distance * Math.cos(rotation.getRotRAD()))));
-        tangentVector.updateVector(tangentVector.getX() + initialVector.getX(),
-                tangentVector.getY() + initialVector.getY());
-        return tangentVector;
+                Math.sin(rotation.getRotRAD()) * distance,
+                Math.cos(rotation.getRotRAD()) * distance
+        );
+        Vector2d updatedVector = new Vector2d(
+                initialVector.getX() + tangentVector.getX(),
+                initialVector.getY() + tangentVector.getY());
+        return updatedVector;
     }
 
     /**
