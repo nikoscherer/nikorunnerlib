@@ -1,13 +1,15 @@
 public class Spline {
     double x;
     double y;
+    double endTangentDistance;
     double rotationDEG;
     double rotationRAD;
 
 
-    public Spline(Vector2d vector, Rotation2d tangent) {
+    public Spline(Vector2d vector, Rotation2d tangent, double endTangentDistance) {
         this.x = vector.getX();
         this.y = vector.getY();
+        this.endTangentDistance = endTangentDistance;
         this.rotationDEG = tangent.getRotDEG();
         this.rotationRAD = tangent.getRotRAD();
     }
@@ -35,6 +37,15 @@ public class Spline {
         this.y = y;
     }
 
+    public void setEndTangentDistance(double endTangent) {
+        this.endTangentDistance = endTangentDistance;
+    }
+
+    public void setEndTangent(double rotation) {
+        this.rotationRAD = rotation;
+        this.rotationDEG = Math.toDegrees(rotation);
+    }
+
     /**
      * @param x
      * @return returns this vectors x value.
@@ -55,15 +66,19 @@ public class Spline {
         return new Vector2d(x, y);
     }
 
-    public double getRotDEG() {
+    public double getEndTangentRotDEG() {
         return rotationDEG;
     }
 
-    public double getRotRAD() {
+    public double getEndTangentRotRAD() {
         return rotationRAD;
     }
 
-    public Rotation2d getRot2dRAD() {
+    public Rotation2d getEndTangentRot2dRAD() {
         return new Rotation2d(rotationRAD);
+    }
+
+    public double getEndTangentDistance() {
+        return endTangentDistance;
     }
 }

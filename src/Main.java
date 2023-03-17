@@ -11,18 +11,18 @@ public class Main {
         
 
         Vector2d startPose = new Vector2d(0, 0);
+        MecanumDrive drive = new MecanumDrive();
 
         Trajectory traj = new Trajectory.TrajectoryBuilder(startPose)
-                .splineTo(new Vector2d(24, 0), new Rotation2d(Math.toRadians(-90)))
-                .splineTo(new Vector2d(24, 24), new Rotation2d(Math.toRadians(-180)))
-                .splineTo(new Vector2d(0, 24), new Rotation2d(Math.toRadians(90)))
-                .splineTo(new Vector2d(0, 0), new Rotation2d(Math.toRadians(0)))
-                // .splineTo(new Vector2d(0, 0), null)
+                .splineTo(new Vector2d(24, 0), 
+                new Rotation2d(Math.toRadians(-90)), 0)
                 .build();
 
         // for (int i = 0; i < traj.getWaypoints().size(); i++) {
         //     System.out.println(traj.getWaypoints().get(i));
         // }
+
+        drive.followTrajectory(traj);
 
         
 

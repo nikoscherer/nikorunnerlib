@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Trajectory {
     static ArrayList<Spline> splineValues;
@@ -20,8 +21,16 @@ public class Trajectory {
             this.startPose = startPose;
         }
 
-        public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent) {
-            this.SplineValues.add(new Spline(endVector, endTangent));
+        /** Creats a quartic bézier spline
+         * 
+         * @param endVector
+         * @param endTangent
+         * @param endTangentDistance
+         * for default end tangent distance, input 0.
+         * @return
+         */
+        public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent, double endTangentDistance) {
+            this.SplineValues.add(new Spline(endVector, endTangent, endTangentDistance));
 
             return this;
         }
@@ -38,15 +47,15 @@ public class Trajectory {
                     initialRotation = null;
                 } else {
                     initialVector = SplineValues.get(i - 1).getVector();
-                    initialRotation = SplineValues.get(i - 1).getRot2dRAD();
+                    initialRotation = new Rotation2d(SplineValues.get(i - 1).getEndTangentRotRAD() * -Math.PI);
                 }
                 SplineEquationGenerator splineGenerator = new SplineEquationGenerator(
                     initialVector, 
                     initialRotation, 
                     SplineValues.get(i).getVector(),
-                    SplineValues.get(i).getRot2dRAD()
+                    SplineValues.get(i).getEndTangentRot2dRAD(),
+                    SplineValues.get(i).getEndTangentDistance()
                     );
-    
                 splines.add(i, splineGenerator.getPositionVectors());
             }
             return new Trajectory(this);
