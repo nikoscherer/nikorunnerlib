@@ -55,6 +55,7 @@ public class SplineEquationGenerator {
             positionVectorArray.set(i, positionVectors[i].getVector());
         }
 
+        posVectorSplineVector.set(0, positionVectorArray);
         return positionVectorArray;
     }
 
