@@ -15,4 +15,8 @@ public class Rotation2d {
         return rotationRAD;
     }
 
+    public Rotation2d getRot2dRAD() {
+        return new Rotation2d(rotationRAD);
+    }
+
 }

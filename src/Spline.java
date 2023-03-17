@@ -62,4 +62,8 @@ public class Spline {
     public double getRotRAD() {
         return rotationRAD;
     }
+
+    public Rotation2d getRot2dRAD() {
+        return new Rotation2d(rotationRAD);
+    }
 }

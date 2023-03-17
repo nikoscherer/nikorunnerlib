@@ -2,13 +2,13 @@ import java.util.ArrayList;
 
 public class Trajectory {
     static ArrayList<Spline> splineValues;
-    static ArrayList<ArrayList<Vector2d>> splines = new ArrayList<ArrayList<Vector2d>>();
+    static ArrayList<Vector2d[]> splines = new ArrayList<Vector2d[]>();
 
     public Trajectory(TrajectoryBuilder builder) {
         this.splineValues = builder.SplineValues;
     }
 
-    public ArrayList<ArrayList<Vector2d>> getWaypoints() {
+    public ArrayList<Vector2d[]> getWaypoints() {
         return splines;
     }
 
@@ -27,26 +27,27 @@ public class Trajectory {
         }
 
         public Trajectory build() {
-            Vector2d initialVector;
-            Rotation2d initialTangent;
 
             for (int i = 0; i < SplineValues.size(); i++) {
-                // if (i == 0) {
-                // initialVector = startPose;
-                // initialTangent = new Rotation2d(0);
-                // } else {
-                // initialVector = SplineValues.get(i - 1).getVector();
-                // initialTangent = new Rotation2d(SplineValues.get(i - 1).getRotRAD());
-                // }
 
-                SplineEquationGenerator spline = new SplineEquationGenerator(
-                        new Vector2d(0, 0),
-                        new Rotation2d(Math.toRadians(90)),
-                        new Vector2d(5, 0), // SplineValues.get(i).getVector()
-                        new Rotation2d(Math.toRadians(90)));
+                Vector2d initialVector;
+                Rotation2d initialRotation;
 
-                splines.set(i, spline.getPositionVectors());
-
+                if(i == 0) {
+                    initialVector = startPose.getVector();
+                    initialRotation = null;
+                } else {
+                    initialVector = SplineValues.get(i - 1).getVector();
+                    initialRotation = SplineValues.get(i - 1).getRot2dRAD();
+                }
+                SplineEquationGenerator splineGenerator = new SplineEquationGenerator(
+                    initialVector, 
+                    initialRotation, 
+                    SplineValues.get(i).getVector(),
+                    SplineValues.get(i).getRot2dRAD()
+                    );
+    
+                splines.add(i, splineGenerator.getPositionVectors());
             }
             return new Trajectory(this);
         }
