@@ -8,7 +8,9 @@ public class Vector2d {
         this.y = y;
     }
 
-    /** Sets the x value for this vector.
+    /**
+     * Sets the x value for this vector.
+     * 
      * @param x
      * 
      */
@@ -16,14 +18,18 @@ public class Vector2d {
         this.x = x;
     }
 
-    /** Sets the y value for this vector.
+    /**
+     * Sets the y value for this vector.
+     * 
      * @param y
      */
     public void setY(double y) {
         this.y = y;
     }
 
-    /** Sets the x and y values for this vector.
+    /**
+     * Sets the x and y values for this vector.
+     * 
      * @param x
      */
     public void setXY(double x, double y) {
@@ -39,11 +45,17 @@ public class Vector2d {
         return x;
     }
 
-    /** Gets the y value for this vector.
+    /**
+     * Gets the y value for this vector.
+     * 
      * @param x
      * @return returns this vectors y value.
      */
     public double getY() {
         return y;
+    }
+
+    public Vector2d getVector() {
+        return new Vector2d(x, y);
     }
 }
