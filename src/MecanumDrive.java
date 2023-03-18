@@ -7,7 +7,7 @@ public class MecanumDrive {
         TrajectoryFollower followTrajrctory = new TrajectoryFollower(trajectory, this);
     }
 
-    public void setPowers(double speed, Rotation2d rotation, Odometry odometry) {
+    public void setPowers(double speed, Rotation2d rotation) {
         // double xPower = 1;
         // double yPower = 1;
         // double x = (xPower * Math.cos(rotation.getRotRAD())) - (yPower *
