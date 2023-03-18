@@ -1,5 +1,3 @@
-import javafx.geometry.Point2D;
-
 public class SplineEquationGenerator {
 
     final double defaultTanDistance = 5;
@@ -19,6 +17,7 @@ public class SplineEquationGenerator {
      */
     SplineEquationGenerator(Vector2d startVector, Rotation2d startTangent,
             Vector2d endVector, Rotation2d endTangent, double endTanDistance) {
+
         if (endTanDistance == 0) {
             endTanDistance = defaultTanDistance;
         }
@@ -26,10 +25,8 @@ public class SplineEquationGenerator {
         Vector2d endTangentVector = calculateTangentVector(endVector, endTangent, endTanDistance);
         if (startTangent == null) {
             startTangent = calculateTangentRotation(startVector, endTangentVector);
-            // System.out.println("Start Tangent: " + startTangent);
         }
         Vector2d startTangentVector = calculateTangentVector(startVector, startTangent, endTanDistance);
-
         lerp(startVector, startTangentVector, endVector, endTangentVector);
     }
 
@@ -40,8 +37,6 @@ public class SplineEquationGenerator {
     public Vector2d[] lerp(Vector2d startVector, Vector2d startTangent, Vector2d endVector,
             Vector2d endTangent) {
         lerpMultiplier = (double) 1 / waypoints;
-
-        // System.out.println("Trajectory Spline Coordinates: ");
 
         int n = 0;
         for (double t = lerpMultiplier; !(t > 1); t = t + lerpMultiplier) {

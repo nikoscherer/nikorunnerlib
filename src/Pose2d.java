@@ -17,11 +17,27 @@ public class Pose2d{
         return y;
     }
 
+    public Vector2d getVector() {
+        return new Vector2d(x, y);
+    }
+
     public double getRotDEG() {
         return Math.toDegrees(rotation);
     }
 
     public double getRotRAD() {
         return rotation;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setRot(double rotation) {
+        this.rotation = rotation;
     }
 }
