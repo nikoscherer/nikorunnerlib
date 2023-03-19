@@ -70,7 +70,6 @@ public class Trajectory {
          */
         public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent, double endTangentDistance) {
             try {
-                System.out.println(SplineValues.size());
                 if(!(SplineValues.size() == 0)) {
                     if(SplineValues.get(SplineValues.size() - 1).getX() == endVector.getX() &&
                     SplineValues.get(SplineValues.size() - 1).getY() == endVector.getY()) {
@@ -103,7 +102,6 @@ public class Trajectory {
          */
         public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent) {
             try {
-                System.out.println(SplineValues.size());
                 if(!(SplineValues.size() == 0)) {
                     if(SplineValues.get(SplineValues.size() - 1).getX() == endVector.getX() &&
                     SplineValues.get(SplineValues.size() - 1).getY() == endVector.getY()) {

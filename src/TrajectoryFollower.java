@@ -1,19 +1,20 @@
 public class TrajectoryFollower {
 
     static double allowedDisplacement = .25;
+    MecanumDrive drive;
 
     public TrajectoryFollower(Trajectory trajectory, MecanumDrive drive) {
-
+        this.drive = drive;
         Pose2d currentPose = new Pose2d(new Vector2d(0, 0), new Rotation2d(Math.toRadians(0)));
 
         for (int i = 0; i < trajectory.getWaypoints().size(); i++) {
             for (int j = 0; j < trajectory.getWaypoints().get(i).length - 1; j++) {
 
+                System.out.println("Next Point: " + j);
                 Vector2d displacement = calculateDisplacement(
                     currentPose.getVector(),
                     trajectory.getWaypoints().get(i)[j + 1].getVector());
 
-                // System.out.println("Current Point: " + j);
 
                 while(!(isReady(displacement))) {
                     Rotation2d direction = calculateDirection(
@@ -24,9 +25,10 @@ public class TrajectoryFollower {
                         currentPose.getVector(),
                         trajectory.getWaypoints().get(i)[j + 1].getVector());
 
-                    calculateWheelPower(displacement, direction);
+                    Vector2d chassisSpeeds = calculateWheelPower(currentPose.getVector(), direction);
+                    
 
-                    currentPose.setX(currentPose.getX() + (displacement.getX() / 10000000));
+                    currentPose.setX(chassisSpeeds.getX() + (displacement.getX() / 10000000));
                     currentPose.setY(currentPose.getY() + (displacement.getY() / 10000000));
                 }
             }
@@ -41,11 +43,20 @@ public class TrajectoryFollower {
         return isReady;
     }
 
-    public void calculateWheelPower(Vector2d displacement, Rotation2d direction) {
+    public Vector2d calculateWheelPower(Vector2d displacement, Rotation2d direction) {
 
-        
+        double X = (.00000000001 * Math.cos(direction.getRotRAD())) + (.00000000001 * Math.sin(direction.getRotRAD()));
+        double Y = (.00000000001 * Math.sin(direction.getRotRAD())) - (.00000000001 * Math.cos(direction.getRotRAD()));
 
-        MecanumDrive.setMotorPower(0, 0, 0, 0);
+        // drive.setMotorPower(X + Y, X + Y, X + Y, X + Y);
+
+        // ChassisSpeeds speeds = new ChassisSpeeds();
+
+        Vector2d vector = new Vector2d(X, Y);
+
+        // speeds.setChassisSpeeds(Y + X, Y - X, Y - X, Y + X);
+
+        return vector;
     }
 
     public Rotation2d calculateDirection(Vector2d initialVector, Vector2d endVector) {

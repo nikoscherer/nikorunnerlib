@@ -63,8 +63,8 @@ public class SplineEquationGenerator {
             }
             // System.out.print("X: " + positionVectors[n].getX() + " ");
             // System.out.println("Y: " + positionVectors[n].getY());
-            System.out.print("(" + positionVectors[n].getX() + ",");
-            System.out.print(positionVectors[n].getY() + ")" + ",");
+            // System.out.print("(" + positionVectors[n].getX() + ",");
+            // System.out.print(positionVectors[n].getY() + ")" + ",");
             n++;
         }
 

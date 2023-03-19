@@ -2,7 +2,7 @@ public class Main {
 
     public static void main(String args[]) {
         
-        Vector2d startPose = new Vector2d(1, 0);
+        Vector2d startPose = new Vector2d(0, 0);
         MecanumDrive drive = new MecanumDrive();
 
         float placeX = 26f;
@@ -12,8 +12,8 @@ public class Main {
         float stackY = 11.5f;
 
         Trajectory traj1 = new Trajectory.TrajectoryBuilder(startPose)
-                .splineTo(new Vector2d(0, 0), new Rotation2d(Math.toRadians(-90)), 5)
-                .splineTo(new Vector2d(1, 0), new Rotation2d(Math.toRadians(-180)), 2)
+                .splineTo(new Vector2d(5, 10), new Rotation2d(Math.toRadians(-90)), 5)
+                .splineTo(new Vector2d(10, 23), new Rotation2d(Math.toRadians(-180)), 2)
                 .build();
 
 

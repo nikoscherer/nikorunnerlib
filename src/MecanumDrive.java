@@ -4,6 +4,10 @@ public class MecanumDrive {
     }
 
 
+    double fl;
+    double fr;
+    double bl;
+    double br;
 
     
 
@@ -11,7 +15,10 @@ public class MecanumDrive {
         TrajectoryFollower followTrajectory = new TrajectoryFollower(trajectory, this);
     }
 
-    public static void setMotorPower(double fl, double fr, double bl, double br) {
-        
+    public void setMotorPower(double fl, double fr, double bl, double br) {
+        this.fl = fl;
+        this.fr = fr;
+        this.bl = br;
+        this.br = br;
     }
 }
