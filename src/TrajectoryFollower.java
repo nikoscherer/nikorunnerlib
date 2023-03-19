@@ -13,7 +13,7 @@ public class TrajectoryFollower {
                     currentPose.getVector(),
                     trajectory.getWaypoints().get(i)[j + 1].getVector());
 
-                System.out.println("Current Point: " + j);
+                // System.out.println("Current Point: " + j);
 
                 while(!(isReady(displacement))) {
                     Rotation2d direction = calculateDirection(

@@ -16,7 +16,8 @@ public class SplineEquationGenerator {
      * @param endTanDistance
      */
     SplineEquationGenerator(Vector2d startVector, Rotation2d startTangent,
-            Vector2d endVector, Rotation2d endTangent, double endTanDistance) {
+            Vector2d endVector, Rotation2d endTangent, double endTanDistance){
+
 
         if (endTanDistance == 0) {
             endTanDistance = defaultTanDistance;
@@ -28,6 +29,9 @@ public class SplineEquationGenerator {
         }
         Vector2d startTangentVector = calculateTangentVector(startVector, startTangent, endTanDistance);
         lerp(startVector, startTangentVector, endVector, endTangentVector);
+    }
+
+    SplineEquationGenerator() {
     }
 
     public void setEndTangentDistance() {
@@ -59,8 +63,8 @@ public class SplineEquationGenerator {
             }
             // System.out.print("X: " + positionVectors[n].getX() + " ");
             // System.out.println("Y: " + positionVectors[n].getY());
-            // System.out.print("(" + positionVectors[n].getX() + ",");
-            // System.out.print(positionVectors[n].getY() + ")" + ",");
+            System.out.print("(" + positionVectors[n].getX() + ",");
+            System.out.print(positionVectors[n].getY() + ")" + ",");
             n++;
         }
 
