@@ -1,3 +1,5 @@
+// import java.util.Timer;
+
 // public class Controllers {
 
 //     public class PIDCoefficients {
@@ -52,7 +54,11 @@
 //         double target;
 //         double current;
 
+//         double integralSum = 0;
+//         double lastError;
+
 //         // INPUT TIMER (ElapsedTime timer = new ElapsedTime())
+//         Timer timer = new Timer(true);
 
 //         public PIDController(PIDCoefficients pidCoeff) {
 //             this.kP = pidCoeff.getkP();
@@ -65,9 +71,13 @@
 //         }
 
 //         public double calculate(double current) {
-//             // double power;
+//             double velocity;
+
+//             double error = (this.target - current);
+//             double integral = integral + (error - timer.);
+//             double derivative;
             
-//             // return power;
+//             return velocity;
 //         }
 //     }
 

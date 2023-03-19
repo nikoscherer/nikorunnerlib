@@ -13,7 +13,7 @@ public class Trajectory {
      */
     public Vector2d end() {
         Vector2d vector;
-        vector = splineValues.get(splineValues.size() - 1).getVector();
+        vector = splines.get(splines.size() - 1)[splines.get(0).length - 1].getVector();
         return vector;
     }
 
@@ -69,7 +69,26 @@ public class Trajectory {
          * WARNING: endTangentDistance is still experimental and could cause unknown issues.
          */
         public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent, double endTangentDistance) {
-            this.SplineValues.add(new Spline(endVector, endTangent, endTangentDistance));
+            try {
+                System.out.println(SplineValues.size());
+                if(!(SplineValues.size() == 0)) {
+                    if(SplineValues.get(SplineValues.size() - 1).getX() == endVector.getX() &&
+                    SplineValues.get(SplineValues.size() - 1).getY() == endVector.getY()) {
+                        throw new Exception("Spline generation erorr: Spline has constant position!");
+                    } else {
+                        this.SplineValues.add(new Spline(endVector, endTangent, endTangentDistance));
+                    }
+                } else {
+                    if(startPose.getX() == endVector.getX() &&
+                    startPose.getY() == endVector.getY()) {
+                        throw new Exception("Spline generation erorr: Spline has constant position!");
+                    } else {
+                        this.SplineValues.add(new Spline(endVector, endTangent, endTangentDistance));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return this;
         }
@@ -83,7 +102,26 @@ public class Trajectory {
          * WARNING: endTangentDistance is still experimental and could cause unknown issues.
          */
         public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent) {
-            this.SplineValues.add(new Spline(endVector, endTangent, 0));
+            try {
+                System.out.println(SplineValues.size());
+                if(!(SplineValues.size() == 0)) {
+                    if(SplineValues.get(SplineValues.size() - 1).getX() == endVector.getX() &&
+                    SplineValues.get(SplineValues.size() - 1).getY() == endVector.getY()) {
+                        throw new Exception("Spline generation erorr: Spline has constant position!");
+                    } else {
+                        this.SplineValues.add(new Spline(endVector, endTangent, 0));
+                    }
+                } else {
+                    if(startPose.getX() == endVector.getX() &&
+                    startPose.getY() == endVector.getY()) {
+                        throw new Exception("Spline generation erorr: Spline has constant position!");
+                    } else {
+                        this.SplineValues.add(new Spline(endVector, endTangent, 0));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return this;
         }
