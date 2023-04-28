@@ -1,126 +1,131 @@
 import java.util.ArrayList;
 
 public class Trajectory {
-    ArrayList<Spline> splineValues = new ArrayList<Spline>();
-    static ArrayList<Vector2d[]> splines = new ArrayList<Vector2d[]>();
+
+    ArrayList<SplineValues2d> paths;
+
+    static ArrayList<Spline2d> splineList = new ArrayList<>();
+    
+   
 
     public Trajectory(TrajectoryBuilder builder) {
-        this.splineValues = builder.SplineValues;
+        this.paths = builder.splinePath;
     }
 
-    /** Gets a trajectories end position (Vector2d)
-     * @return returns trajectory end position
+    /** 
+     * @return returns a trajectories end pose
      */
-    public Vector2d end() {
-        Vector2d vector;
-        vector = splines.get(splines.size() - 1)[splines.get(0).length - 1].getVector();
-        return vector;
+    public Pose2d end() {
+        return splineList.get(splineList.size()).getEndPose();
     }
 
-    public ArrayList<Vector2d[]> getWaypoints() {
-        return splines;
-    }
 
     public static class TrajectoryBuilder {
-        Vector2d startPose;
-        private ArrayList<Spline> SplineValues = new ArrayList<Spline>();
+        ArrayList<SplineValues2d> splinePath = new ArrayList<>();
+        ArrayList<SplineValues2d> linePath = new ArrayList<>();
+        Pose2d startPose;
 
-        public TrajectoryBuilder(Vector2d startPose) {
+        public TrajectoryBuilder(Pose2d startPose) {
             this.startPose = startPose;
         }
 
-        /** Builds a trajectory **/
         public Trajectory build() {
 
-            for (int i = 0; i < SplineValues.size(); i++) {
-                
-                Vector2d initialVector;
+            Boolean lastContinuity = false;
+            
+
+            for (int i = 0; i < splinePath.size(); i++) {
+
+                Pose2d initialPose;
                 Rotation2d initialTangent;
 
-                if (i == 0) {
-                    initialVector = startPose.getVector();
+                // If first spline in trajectory, reset initial pose and tangent, otherwise, set to last spline end pose.
+                // Also reset continuity to beginning spline.
+                if(i == 0) {
+                    initialPose = startPose;
                     initialTangent = null;
+
+                    lastContinuity = splinePath.get(i).type.equals("SplineToProfiledHeading") || 
+                    splinePath.get(i).type.equals("SplineLineToProfiledHeading");
                 } else {
-                    initialVector = SplineValues.get(i - 1).getVector();
-                    initialTangent = new Rotation2d(Math.signum(SplineValues.get(i - 1).getEndTangentRotRAD()) * -(SplineValues.get(i - 1).getEndTangentRotRAD() + Math.PI));
+                    initialPose = splinePath.get(i - 1).getPose();
+                    initialTangent = new Rotation2d(Math.signum(splinePath.get(i - 1).getRotation()) * -(splinePath.get(i - 1).getRotation() + Math.PI));
+                }
+
+
+                boolean continuous = splinePath.get(i).type.equals("SplineToProfiledHeading") || 
+                splinePath.get(i).type.equals("SplineLineToProfiledHeading");
+
+                try {
+                    if(continuous != lastContinuity) {
+                        throw new Exception("Spline is not continuous!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 
-                SplineEquationGenerator splineGenerator = new SplineEquationGenerator();
-                    splineGenerator = new SplineEquationGenerator(
-                            initialVector,
-                            initialTangent,
-                            SplineValues.get(i).getVector(),
-                            SplineValues.get(i).getEndTangentRot2dRAD(),
-                            SplineValues.get(i).getEndTangentDistance());
-                            
-                splines.add(i, splineGenerator.getPositionVectors());
+                lastContinuity = continuous;
+
+
+                if (continuous) {
+
+                    SplineGenerator spline = new SplineGenerator(
+                        initialPose, 
+                        initialTangent, 
+                        splinePath.get(i).endPose, 
+                        splinePath.get(i).getRotation2d(),
+                        splinePath.get(i).getEndTanDistance(),
+                        splinePath.get(i).getType()
+                    );
+
+                    splineList.add(spline.getSpline());
+                } else {
+
+                    LineGenerator line = new LineGenerator(
+                        initialPose, 
+                        splinePath.get(i).endPose,
+                        splinePath.get(i).getType()
+                    );
+
+                    splineList.add(line.getAsSpline());
+                }
             }
 
             return new Trajectory(this);
         }
 
-        /** Creates a basic spline without heading control
-         * @param endVector end position for the spline
-         * @param endTangent end tangent for the spline
-         * @param endTangentDistance
-         * distance that the spline starts to come in from (an angle).
-         * Default is 5.
-         * <br></br>
-         * WARNING: endTangentDistance is still experimental and could cause unknown issues.
-         */
-        public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent, double endTangentDistance) {
-            try {
-                if(!(SplineValues.size() == 0)) {
-                    if(SplineValues.get(SplineValues.size() - 1).getX() == endVector.getX() &&
-                    SplineValues.get(SplineValues.size() - 1).getY() == endVector.getY()) {
-                        throw new Exception("Spline generation erorr: Spline has constant position!");
-                    } else {
-                        this.SplineValues.add(new Spline(endVector, endTangent, endTangentDistance));
-                    }
-                } else {
-                    if(startPose.getX() == endVector.getX() &&
-                    startPose.getY() == endVector.getY()) {
-                        throw new Exception("Spline generation erorr: Spline has constant position!");
-                    } else {
-                        this.SplineValues.add(new Spline(endVector, endTangent, endTangentDistance));
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        // Splines
+        public TrajectoryBuilder splineToProfiledHeading(Pose2d endPose, Rotation2d endTangent, double endTangentDistance) {
+            this.splinePath.add(new SplineValues2d(endPose, endTangent, endTangentDistance, "splineToProfiledHeading"));
             return this;
         }
 
-         /** Creates a basic spline without heading control
-         * @param endVector end position for the spline
-         * @param endTangent end tangent for the spline
-         * distance that the spline starts to come in from (an angle).
-         * Default is 5.
-         * <br></br>
-         * WARNING: endTangentDistance is still experimental and could cause unknown issues.
-         */
-        public TrajectoryBuilder splineTo(Vector2d endVector, Rotation2d endTangent) {
-            try {
-                if(!(SplineValues.size() == 0)) {
-                    if(SplineValues.get(SplineValues.size() - 1).getX() == endVector.getX() &&
-                    SplineValues.get(SplineValues.size() - 1).getY() == endVector.getY()) {
-                        throw new Exception("Spline generation erorr: Spline has constant position!");
-                    } else {
-                        this.SplineValues.add(new Spline(endVector, endTangent, 0));
-                    }
-                } else {
-                    if(startPose.getX() == endVector.getX() &&
-                    startPose.getY() == endVector.getY()) {
-                        throw new Exception("Spline generation erorr: Spline has constant position!");
-                    } else {
-                        this.SplineValues.add(new Spline(endVector, endTangent, 0));
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        public TrajectoryBuilder splineToLinearHeading(Pose2d endPose, Rotation2d endTangent, double endTangentDistance) {
+            this.splinePath.add(new SplineValues2d(endPose, endTangent, endTangentDistance, "splineToLinearHeading"));
+            return this;
+        }
 
+        // make heading uselessl
+        public TrajectoryBuilder splineToConstantHeading(Vector2d endVector, Rotation2d endTangent, double endTangentDistance) {
+            this.splinePath.add(new SplineValues2d(new Pose2d(endVector), endTangent, endTangentDistance, "splineToConstantHeading"));
+            return this;
+        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+        // make heading useless
+        public TrajectoryBuilder splineTo(Pose2d endPose, Rotation2d endTangent, double endTangsntDistance) {
+            this.splinePath.add(new SplineValues2d(endPose, endTangent, endTangsntDistance, "splineTo"));
+            return this;
+        }
+
+        // SplineLines
+        public TrajectoryBuilder splineLineToProfiledHeading(Pose2d endPose, Rotation2d endTangent, double endTangentDistance) {
+            this.splinePath.add(new SplineValues2d(endPose, endTangent, endTangentDistance, "splineLineToProfiledHeading"));
+            return this;
+        }
+
+        // Lines
+        public TrajectoryBuilder lineToProfiledHeading(Pose2d endPose) {
+            this.splinePath.add(new SplineValues2d(endPose, null, 0, "lineToProfiledHeading"));
             return this;
         }
     }

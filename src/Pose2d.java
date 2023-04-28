@@ -1,43 +1,112 @@
-public class Pose2d{
-    double x;
-    double y;
-    double rotation;
+public class Pose2d {
+    Vector2d poseVector;
+    Rotation2d poseRotation;
 
-    public Pose2d(Vector2d position, Rotation2d rotation) {
-        this.x = position.getX();
-        this.y = position.getY();
-        this.rotation = rotation.getRotRAD();
+    /** Creates a new Pose2d class.
+     * @param vector the vector for this Pose2d.
+     * @param rotation the rotation for this Pose2d.
+     */
+    public Pose2d(double x, double y, double rotation) {
+        this.poseVector = new Vector2d(x, y);
+        this.poseRotation = new Rotation2d(rotation);
+    }
+    public Pose2d(Vector2d vector, double rotation) {
+        this.poseVector = vector;
+        this.poseRotation = new Rotation2d(rotation);
+    }
+    public Pose2d(Vector2d vector, Rotation2d rotation) {
+        this.poseVector = vector;
+     
+        this.poseRotation = rotation;
+    }
+    public Pose2d(Vector2d vector) {
+        this.poseVector = vector;
+        this.poseRotation = null;
     }
 
-    public double getX() {
-        return x;
-    }
+// Vector Values
 
-    public double getY() {
-        return y;
-    }
+    // Returned values
 
+    /**
+     * @return returns as a vector.
+     */
     public Vector2d getVector() {
-        return new Vector2d(x, y);
+        return poseVector.getVector();
     }
 
-    public double getRotDEG() {
-        return Math.toDegrees(rotation);
+    /**
+     * @return returns this vectors x value.
+     */
+    public double getX() {
+        return poseVector.getX();
     }
 
-    public double getRotRAD() {
-        return rotation;
+    /**
+     * @return returns this vectors y value.
+     */
+    public double getY() {
+        return poseVector.getY();
     }
 
+
+    // Set values
+
+    /** Updates this Vector2ds x and y coordinates.
+    * @param x value.
+    * @param y value.
+    */
+    public void setVector(double x, double y) {
+        poseVector.setX(x);
+        poseVector.setY(y);
+    }
+
+    /**
+     * @param x the new x value of this Pose2d.
+     */
     public void setX(double x) {
-        this.x = x;
+        poseVector.setX(x);
     }
-
+    
+    /**
+     * @param x the new y value of this Pose2d.
+     */
     public void setY(double y) {
-        this.y = y;
+        poseVector.setY(y);
     }
 
-    public void setRot(double rotation) {
-        this.rotation = rotation;
+// Rotation Values
+
+// Returned values
+
+    /**
+     * @return returns this Rotation2d as a Rotation2d.
+     */
+    public Rotation2d getRotation2d() {
+        return poseRotation.getRotation2d();
+    }
+
+    /**
+     * @return returns this Rotation2ds rotation as a rotation in radians.
+     */
+    public double getRotation() {
+        return poseRotation.getRotation();
+    }
+
+    /**
+     * @return returns this Rotation2ds rotation as a rotation in degrees.
+     */
+    public double getRotationDEG() {
+        return poseRotation.getRotationDEG();
+    }
+
+
+    // Set Values
+
+    /** Updates this Rotation2ds rotation.
+    * @param rotation value in radians.
+    */
+    public void setRotation(double rotation) {
+        poseRotation.setRotation(rotation);
     }
 }

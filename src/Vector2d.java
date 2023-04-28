@@ -1,44 +1,26 @@
 public class Vector2d {
+    private double x;
+    private double y;
 
-    double x;
-    double y;
-
+    /** Creates a new Vector2d class.
+    * @param x the x value for this Vector2d.
+    * @param y the y value for this Vector2d.
+    */
     public Vector2d(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
+    // Returned values
+
     /**
-     * Sets the x value for this vector.
-     * 
-     * @param x
-     * 
+     * @return returns as a vector.
      */
-    public void setX(double x) {
-        this.x = x;
+    public Vector2d getVector() {
+        return this;
     }
 
     /**
-     * Sets the y value for this vector.
-     * 
-     * @param y
-     */
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    /**
-     * Sets the x and y values for this vector.
-     * 
-     * @param x
-     */
-    public void setXY(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
-     * @param x
      * @return returns this vectors x value.
      */
     public double getX() {
@@ -46,16 +28,37 @@ public class Vector2d {
     }
 
     /**
-     * Gets the y value for this vector.
-     * 
-     * @param x
      * @return returns this vectors y value.
      */
     public double getY() {
         return y;
     }
 
-    public Vector2d getVector() {
-        return new Vector2d(x, y);
+
+    // Set values
+
+    /** Updates this Vector2ds x and y coordinates.
+    * @param x value.
+    * @param y value.
+    */
+    public void setVector(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * @param x the new x value of this Vector2d.
+     */
+    public void setX(double x) {
+        this.x = x;
+    }
+    
+    /**
+     * @param x the new y value of this Vector2d.
+     */
+    public void setY(double y) {
+        this.y = y;
     }
 }
+
+
