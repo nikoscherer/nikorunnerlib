@@ -45,24 +45,24 @@ public class Trajectory {
                     initialPose = startPose;
                     initialTangent = null;
 
-                    lastContinuity = splinePath.get(i).type.equals("SplineToProfiledHeading") || 
-                    splinePath.get(i).type.equals("SplineLineToProfiledHeading");
+                    lastContinuity = splinePath.get(i).type.equals("splineToProfiledHeading") || 
+                    splinePath.get(i).type.equals("splineLineToProfiledHeading");
                 } else {
                     initialPose = splinePath.get(i - 1).getPose();
                     initialTangent = new Rotation2d(Math.signum(splinePath.get(i - 1).getRotation()) * -(splinePath.get(i - 1).getRotation() + Math.PI));
                 }
 
 
-                boolean continuous = splinePath.get(i).type.equals("SplineToProfiledHeading") || 
-                splinePath.get(i).type.equals("SplineLineToProfiledHeading");
+                boolean continuous = splinePath.get(i).type.equals("splineToProfiledHeading") || 
+                splinePath.get(i).type.equals("splineLineToProfiledHeading");
 
-                try {
-                    if(continuous != lastContinuity) {
-                        throw new Exception("Spline is not continuous!");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                // try {
+                //     if(continuous != lastContinuity) {
+                //         throw new Exception("Spline is not continuous!");
+                //     }
+                // } catch (Exception e) {
+                //     e.printStackTrace();
+                // }   
                 
                 lastContinuity = continuous;
 
