@@ -1,14 +1,19 @@
-
 public class Main {
     public static void main(String[] args) {
-        
-        Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
-        Trajectory traj1 = new Trajectory.TrajectoryBuilder(startPose)
-            .splineToProfiledHeading(new Pose2d(5, 0, 0), new Rotation2d(Math.toRadians(-90)), 1)
-            .splineToProfiledHeading(new Pose2d(15, 10, 0), new Rotation2d(Math.toRadians(-90)), 8)
-            .splineToProfiledHeading(new Pose2d(20, 10, 0), new Rotation2d(Math.toRadians(-90)), 1)
-            .lineToProfiledHeading(new Pose2d(20, 20, 0))
-            .build();
+        Vector2d robotPose = new Vector2d(5, 5);
+
+
+        double radius = 3; // FOLLOW RADIUS, in Inches
+        Circle2d circle = new Circle2d(robotPose.getX(), robotPose.getY(), radius);
+
+        // Check through spline points if it intersects the circle
+        Vector2d firstLinePoint = new Vector2d(5, 5);
+        Vector2d secondLinePoint = new Vector2d(10, 10);
+
+
+        
+
+        System.out.println(Math.pow(-6, 2));
     }
 }
