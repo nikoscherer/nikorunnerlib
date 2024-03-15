@@ -1,36 +1,40 @@
+package Pathing;
 import java.util.ArrayList;
 
+import Geometry.*;
+import Other.Round;
+
 public class SplineGenerator {
-    double waypoints = 500;
+    double waypoints = 11;
     double lerpMultiplier = 1 / waypoints;
 
     final double defaultTanDistance = 5;
 
 
-    ArrayList<Vector2d> splinePoints = new ArrayList<>();
-    Spline2d spline;
+    ArrayList<Point2d> splinePoints = new ArrayList<>();
+    Path2d spline;
 
-    SplineGenerator(Pose2d startPose, Rotation2d startTangent, 
-        Pose2d endPose, Rotation2d endTangent, double endTanDistance, String type) {
 
-        if (endTanDistance == 0) {
-            endTanDistance = defaultTanDistance;
-        }
+    // INPUT STARTPOSE STARTTANGENT (Vector), ENDPOSE ENDTANGENT (Vector)
+    SplineGenerator(Pose2d startPose, NEWVector2d startTangent, NEWVector2d endTangent, Pose2d endPose) {
     
-        Vector2d endTangentVector = calculateTangentVector(endPose.getVector(), endTangent, endTanDistance);
+        Point2d startTangentPoint = new Point2d(
+            startPose.getX() + startTangent.getX(),
+            startPose.getY() + startTangent.getY());
 
-        if (startTangent == null) {
-            startTangent = calculateTangentRotation(startPose.getVector(), endTangentVector);
-        }
-        Vector2d startTangentVector = calculateTangentVector(startPose.getVector(), startTangent, endTanDistance);
+        Point2d endTangentPoint = new Point2d(
+            endPose.getX() + endTangent.getX(),
+            endPose.getY() + endTangent.getY()
+        );
 
-        lerp(startPose.getVector(), startTangentVector, endPose.getVector(), endTangentVector);
+        lerp(startPose.getPoint(), startTangentPoint, endPose.getPoint(), endTangentPoint);
 
-        spline = new Spline2d(splinePoints, endPose.getRotation2d(), type);
+        spline = new Path2d(splinePoints, startPose.getHeading(), endPose.getHeading());
     }
 
-    public ArrayList<Vector2d> lerp(Vector2d startVector, Vector2d startTangent,
-        Vector2d endVector, Vector2d endTangent) {
+    // try to remake lerp to go between points?
+    public ArrayList<Point2d> lerp(Point2d startVector, Point2d startTangent,
+        Point2d endVector, Point2d endTangent) {
 
         lerpMultiplier = 1 / waypoints;
 
@@ -45,14 +49,14 @@ public class SplineGenerator {
         return splinePoints;
     }
 
-    public Spline2d getSpline() {
+    public Path2d getSpline() {
         return spline;
     }
 
-    public Vector2d calculateSplinePoints(
-        Vector2d startVector, Vector2d startTangent, Vector2d endTangent, Vector2d endVector, double t) {
+    public Point2d calculateSplinePoints(
+        Point2d startVector, Point2d startTangent, Point2d endTangent, Point2d endVector, double t) {
         
-        return new Vector2d(Round.roundToDecimal(
+        return new Point2d(Round.roundToDecimal(
             ((Math.pow(1 - t, 3) * startVector.getX()) +
                     (3 * Math.pow(1 - t, 2) * t * startTangent.getX()) +
                     ((3 * (1 - t) * Math.pow(t, 2) * endTangent.getX())) +
@@ -73,27 +77,27 @@ public class SplineGenerator {
      * @param distance
      * @return Returns tangent rotation as a point using an inital vector.
      */
-    public Vector2d calculateTangentVector(Vector2d initialVector, Rotation2d rotation, double distance) {
-        Vector2d tangentVector = new Vector2d(
-                Math.sin(rotation.getRotation()) * distance,
-                Math.cos(rotation.getRotation()) * distance);
-        Vector2d updatedVector = new Vector2d(
+    public Point2d calculateTangentVector(Point2d initialVector, double rotation, double distance) {
+        Point2d tangentVector = new Point2d(
+                Math.sin(rotation) * distance,
+                Math.cos(rotation) * distance);
+        Point2d updatedVector = new Point2d(
                 initialVector.getX() + tangentVector.getX(),
                 initialVector.getY() + tangentVector.getY());
         return updatedVector;
     }
 
     /**
-     * Translates a Vector2d to a Rotation2d from another point.
+     * Translates a Point2d to a Rotation2d from another point.
      * @param initialVector
      * @param tangentVector
      * @return Returns
      */
-    public Rotation2d calculateTangentRotation(Vector2d initialVector, Vector2d tangentVector) {
+    public double calculateTangentRotation(Point2d initialVector, Point2d tangentVector) {
         double xDisp = tangentVector.getX() - initialVector.getX();
         double yDisp = tangentVector.getY() - initialVector.getY();
 
-        Rotation2d tangentRotation = new Rotation2d(Math.atan2(xDisp, yDisp));
+        double tangentRotation = Math.atan2(xDisp, yDisp);
         return tangentRotation;
     }
 }
