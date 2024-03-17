@@ -9,7 +9,7 @@ public class Path {
 
     static ArrayList<Path2d> path = new ArrayList<>();
     
-   
+
 
     public Path(PathBuilder builder) {
         this.pathSegments = builder.segments;
@@ -37,20 +37,19 @@ public class Path {
         ArrayList<PathSegment> segments = new ArrayList<>();
 
         Pose2d startPose;
-        NEWVector2d startTangent;
+        Vector2d startTangent;
 
-        public PathBuilder(Pose2d startPose, NEWVector2d startTangent) {
+        public PathBuilder(Pose2d startPose, Vector2d startTangent) {
             this.startPose = startPose;
             this.startTangent = startTangent;
         }
 
         public Path build() {
-            
 
             for (int i = 0; i < segments.size(); i++) {
 
                 Pose2d initialPose;
-                NEWVector2d initialTangent;
+                Vector2d initialTangent;
 
                 // If first spline in Path, reset initial pose and tangent, otherwise, set to last spline end pose.
                 // Also reset continuity to beginning spline.
@@ -59,14 +58,15 @@ public class Path {
                     initialTangent = startTangent;
                 } else {
                     initialPose = segments.get(i - 1).getEndPose();
-                    initialTangent = new NEWVector2d(segments.get(i).getStartTangentMag(), getOppositeTangent(segments.get(i - 1).getEndTangent().getDirection()));
+                    initialTangent = segments.get(i - 1).getTangents().getVector2();
                 }
 
+                initialTangent = initialPose.getVector2d().plus(initialTangent);
 
                 SplineGenerator spline = new SplineGenerator(
                     initialPose, 
                     initialTangent,
-                    segments.get(i).getEndTangent(), 
+                    segments.get(i).getEndPose().getVector2d().plus(segments.get(i).getTangents().getVector1()),
                     segments.get(i).getEndPose()
                 );
 
@@ -77,13 +77,16 @@ public class Path {
         }
 
         // Splines
-        public PathBuilder addPoint(Pose2d pose, double startTangentMag, NEWVector2d tangent) {
-            this.segments.add(new PathSegment(pose, startTangentMag, tangent));
+        /**
+         * Create a control point in the spline.
+         * If last control point in path, will not use last magnitude.
+         * @param pose target robot pose
+         * @param controlPoints control point lengths and rotation.
+         * @return
+         */
+        public PathBuilder addControlPoint(Pose2d pose, BiVector2d controlPoints) {
+            this.segments.add(new PathSegment(pose, controlPoints));
             return this;
         }
-    }
-
-    public static double getOppositeTangent(double tangent) {
-        return Math.signum(tangent) * -(tangent + Math.PI);
     }
 }

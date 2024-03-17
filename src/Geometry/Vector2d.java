@@ -1,6 +1,6 @@
 package Geometry;
 
-public class NEWVector2d {
+public class Vector2d {
     double x;
     double y;
     double magnitude;
@@ -11,16 +11,16 @@ public class NEWVector2d {
      * @param magnitude Set the magnitude of the vector.
      * @param direction Set the direction of the vector.
      */
-    public NEWVector2d(double magnitude, double direction) {
+    public Vector2d(double magnitude, double direction) {
         this.magnitude = magnitude;
         this.direction = direction;
 
         // Sin and cos may be reversed
-        this.x = magnitude * Math.sin(x);
-        this.y = magnitude * Math.cos(y);
+        this.x = magnitude * Math.sin(direction);
+        this.y = magnitude * Math.cos(direction);
     }
 
-    public NEWVector2d(Point2d point) {
+    public Vector2d(Point2d point) {
         this.x = point.getX();
         this.y = point.getY();
     }
@@ -78,6 +78,14 @@ public class NEWVector2d {
         this.magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
+
+    public void setMagnitude(double magnitude) {
+        this.magnitude = magnitude;
+
+        this.x = magnitude * Math.sin(direction);
+        this.y = magnitude * Math.cos(direction);
+    }
+
     /**
      * 
      * @param driection Set the direction of this vector.
@@ -85,8 +93,8 @@ public class NEWVector2d {
     public void setDirection(double direction) {
         this.direction = direction;
 
-        this.x = magnitude * Math.sin(x);
-        this.y = magnitude * Math.cos(y);
+        this.x = magnitude * Math.sin(direction);
+        this.y = magnitude * Math.cos(direction);
     }
 
     /**
@@ -98,7 +106,30 @@ public class NEWVector2d {
         this.magnitude = magnitude;
         this.direction = direction;
 
-        this.x = magnitude * Math.sin(x);
-        this.y = magnitude * Math.cos(y);
+        this.x = magnitude * Math.sin(direction);
+        this.y = magnitude * Math.cos(direction);
+    }
+
+
+    public Point2d toPoint2d() {
+        return new Point2d(x, y);
+    }
+
+    public double getDistance(Vector2d vector) {
+        return Math.sqrt(Math.pow(vector.getX() - x, 2) + Math.pow(vector.getY() - y, 2));
+    }
+
+
+    // Translation of Vectors
+    public Vector2d plus(Vector2d vector) {
+        return new Point2d(x + vector.getX(), y + vector.getY()).toVector2d();
+    }
+
+    public Vector2d minus(Vector2d vector) {
+        return new Point2d(x - vector.getX(), y - vector.getY()).toVector2d();
+    }
+
+    public Vector2d times(double scalar) {
+        return new Point2d(x * scalar, y * scalar).toVector2d();
     }
 }

@@ -6,9 +6,9 @@ public class Example {
         
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
 
-        Path path = new Path.PathBuilder(startPose, new NEWVector2d(50, 0))
-            .addPoint(new Pose2d(40, 0, Math.toRadians(90)), 10, new NEWVector2d(5, 0))
-
+        Path path = new Path.PathBuilder(startPose, new Vector2d(5, 90))
+            .addControlPoint(new Pose2d(20, 10, Math.toRadians(90)), new BiVector2d(5, Math.toRadians(-90), 5))
+            .addControlPoint(new Pose2d(25, 0, Math.toRadians(0)), new BiVector2d(5, Math.toRadians(0), 5))
             .build();
     }
 }

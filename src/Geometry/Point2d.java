@@ -27,4 +27,8 @@ public class Point2d {
         this.y = y;
     }
 
+    public Vector2d toVector2d() {
+        return new Vector2d(this);
+    }
+
 }

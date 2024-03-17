@@ -5,7 +5,7 @@ import Geometry.*;
 import Other.Round;
 
 public class SplineGenerator {
-    double waypoints = 11;
+    double waypoints = 40;
     double lerpMultiplier = 1 / waypoints;
 
     final double defaultTanDistance = 5;
@@ -14,60 +14,56 @@ public class SplineGenerator {
     ArrayList<Point2d> splinePoints = new ArrayList<>();
     Path2d spline;
 
+    SplineGenerator(Pose2d startPose, Vector2d startTangent, Vector2d endTangent, Pose2d endPose) {
 
-    // INPUT STARTPOSE STARTTANGENT (Vector), ENDPOSE ENDTANGENT (Vector)
-    SplineGenerator(Pose2d startPose, NEWVector2d startTangent, NEWVector2d endTangent, Pose2d endPose) {
-    
-        Point2d startTangentPoint = new Point2d(
-            startPose.getX() + startTangent.getX(),
-            startPose.getY() + startTangent.getY());
+        // Edit P1 and P2 (tangents) to create a spline that goes between those points instead.
 
-        Point2d endTangentPoint = new Point2d(
-            endPose.getX() + endTangent.getX(),
-            endPose.getY() + endTangent.getY()
-        );
-
-        lerp(startPose.getPoint(), startTangentPoint, endPose.getPoint(), endTangentPoint);
+        lerp(startPose.getPoint().toVector2d(), startTangent, endPose.getPoint().toVector2d(), endTangent);
 
         spline = new Path2d(splinePoints, startPose.getHeading(), endPose.getHeading());
     }
 
     // try to remake lerp to go between points?
-    public ArrayList<Point2d> lerp(Point2d startVector, Point2d startTangent,
-        Point2d endVector, Point2d endTangent) {
+    public ArrayList<Point2d> lerp(Vector2d startVector, Vector2d startTangent,
+        Vector2d endVector, Vector2d endTangent) {
 
         lerpMultiplier = 1 / waypoints;
 
+        splinePoints.add(startVector.toPoint2d());
+
         int n = 0;
         for (double t = lerpMultiplier; !(t > 1); t = t + lerpMultiplier) {
-            splinePoints.add(calculateSplinePoints(startVector, startTangent, endTangent, endVector, t));
+            splinePoints.add(cubicLerp(startVector, startTangent, endTangent, endVector, t).toPoint2d());
             System.out.print("(" + splinePoints.get(n).getX() + ",");
             System.out.print(splinePoints.get(n).getY() + ")" + ",");
             n++;
         }
 
+        splinePoints.add(endVector.toPoint2d());
+
         return splinePoints;
     }
+
+    public Vector2d vectorLerp(Vector2d a, Vector2d b, double t) {
+        return a.plus((b.minus(a)).times(t));
+    }
+
+    public Vector2d quadraticLerp(Vector2d a, Vector2d b, Vector2d c, double t) {
+        Vector2d p0 = vectorLerp(a, b, t);
+        Vector2d p1 = vectorLerp(b, c, t);
+        return vectorLerp(p0, p1, t);
+    }
+
+    public Vector2d cubicLerp(Vector2d a, Vector2d b, Vector2d c, Vector2d d, double t) {
+        Vector2d p0 = quadraticLerp(a, b, c, t);
+        Vector2d p1 = quadraticLerp(b, c, d, t);
+        return vectorLerp(p0, p1, t);
+    }
+
 
     public Path2d getSpline() {
         return spline;
     }
-
-    public Point2d calculateSplinePoints(
-        Point2d startVector, Point2d startTangent, Point2d endTangent, Point2d endVector, double t) {
-        
-        return new Point2d(Round.roundToDecimal(
-            ((Math.pow(1 - t, 3) * startVector.getX()) +
-                    (3 * Math.pow(1 - t, 2) * t * startTangent.getX()) +
-                    ((3 * (1 - t) * Math.pow(t, 2) * endTangent.getX())) +
-                    (Math.pow(t, 3) * endVector.getX())),
-            3),
-            Round.roundToDecimal(((Math.pow(1 - t, 3) * startVector.getY()) +
-                    (3 * Math.pow(1 - t, 2) * t * startTangent.getY()) +
-                    ((3 * (1 - t) * Math.pow(t, 2) * endTangent.getY())) +
-                    (Math.pow(t, 3) * endVector.getY())), 3));
-    }
-
     
     /**
      * Translates a tangents rotation into a vector

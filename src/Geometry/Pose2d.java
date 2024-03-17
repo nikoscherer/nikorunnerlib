@@ -36,6 +36,10 @@ public class Pose2d {
         return new Point2d(x, y);
     }
 
+    public Vector2d getVector2d() {
+        return new Vector2d(new Point2d(x, y));
+    }
+
 
     public void setX(double x) {
         this.x = x;
