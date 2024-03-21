@@ -1,4 +1,4 @@
-package Other;
+package nikorunnerlib.src.Other;
 
 public class Util {
     public static double getOppositeAngle(double rad) {

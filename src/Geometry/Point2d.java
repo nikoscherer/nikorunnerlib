@@ -1,4 +1,4 @@
-package Geometry;
+package nikorunnerlib.src.Geometry;
 
 public class Point2d {
     double x;

@@ -1,8 +1,8 @@
-package Pathing;
+package nikorunnerlib.src.Pathing;
 
 import java.util.ArrayList;
 
-import Geometry.*;
+import nikorunnerlib.src.Geometry.*;
 
 public class Path {
     ArrayList<PathSegment> pathSegments;
@@ -57,7 +57,7 @@ public class Path {
                     initialPose = startPose;
                     initialTangent = startTangent;
                 } else {
-                    initialPose = segments.get(i - 1).getEndPose();
+                    initialPose = segments.get(i - 1).getPose();
                     initialTangent = segments.get(i - 1).getTangents().getVector2();
                 }
 
@@ -66,8 +66,8 @@ public class Path {
                 SplineGenerator spline = new SplineGenerator(
                     initialPose, 
                     initialTangent,
-                    segments.get(i).getEndPose().getVector2d().plus(segments.get(i).getTangents().getVector1()),
-                    segments.get(i).getEndPose()
+                    segments.get(i).getPose().getVector2d().plus(segments.get(i).getTangents().getVector1()),
+                    segments.get(i).getPose()
                 );
 
                 path.add(spline.getSpline());

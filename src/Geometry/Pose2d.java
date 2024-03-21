@@ -1,4 +1,4 @@
-package Geometry;
+package nikorunnerlib.src.Geometry;
 
 public class Pose2d {
     double x;
@@ -32,7 +32,7 @@ public class Pose2d {
         return heading;
     }
 
-    public Point2d getPoint() {
+    public Point2d getPoint2d() {
         return new Point2d(x, y);
     }
 
@@ -49,7 +49,7 @@ public class Pose2d {
         this.y = y;
     }
 
-    public void setPoint(double x, double y) {
+    public void setPoint2d(double x, double y) {
         this.x = x;
         this.y = y;
     }

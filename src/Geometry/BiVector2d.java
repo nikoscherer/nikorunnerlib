@@ -1,6 +1,6 @@
-package Geometry;
+package nikorunnerlib.src.Geometry;
 
-import Other.Util;
+import nikorunnerlib.src.Other.*;
 
 public class BiVector2d {
     Vector2d vector1;

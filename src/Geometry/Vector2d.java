@@ -1,10 +1,17 @@
-package Geometry;
+package nikorunnerlib.src.Geometry;
 
 public class Vector2d {
     double x;
     double y;
     double magnitude;
     double direction;
+
+
+
+
+    // NEED TO FIX DIRECTION
+
+    
 
     /**
      * 
@@ -23,6 +30,9 @@ public class Vector2d {
     public Vector2d(Point2d point) {
         this.x = point.getX();
         this.y = point.getY();
+
+        this.magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        this.direction = Math.atan2(x, y);
     }
 
     /**
@@ -66,6 +76,7 @@ public class Vector2d {
         this.x = x;
 
         this.magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        this.direction = Math.atan2(x, y);
     }
 
     /**
@@ -110,6 +121,14 @@ public class Vector2d {
         this.y = magnitude * Math.cos(direction);
     }
 
+    public void setXY(double x, double y) {
+        this.x = x;
+        this.y = y;
+
+        this.magnitude = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        this.direction = Math.atan2(x, y);
+    }
+
 
     public Point2d toPoint2d() {
         return new Point2d(x, y);
@@ -131,5 +150,9 @@ public class Vector2d {
 
     public Vector2d times(double scalar) {
         return new Point2d(x * scalar, y * scalar).toVector2d();
+    }
+
+    public Vector2d divide(double scalar) {
+        return new Point2d(x / scalar, y / scalar).toVector2d();
     }
 }

@@ -1,8 +1,8 @@
-package Pathing;
+package nikorunnerlib.src.Pathing;
 import java.util.ArrayList;
 
-import Geometry.*;
-import Other.Round;
+import nikorunnerlib.src.Geometry.*;
+import nikorunnerlib.src.Other.*;
 
 public class SplineGenerator {
     double waypoints = 40;
@@ -18,7 +18,7 @@ public class SplineGenerator {
 
         // Edit P1 and P2 (tangents) to create a spline that goes between those points instead.
 
-        lerp(startPose.getPoint().toVector2d(), startTangent, endPose.getPoint().toVector2d(), endTangent);
+        lerp(startPose.getPoint2d().toVector2d(), startTangent, endPose.getPoint2d().toVector2d(), endTangent);
 
         spline = new Path2d(splinePoints, startPose.getHeading(), endPose.getHeading());
     }
@@ -44,6 +44,8 @@ public class SplineGenerator {
         return splinePoints;
     }
 
+
+    // From PathPlanner
     public Vector2d vectorLerp(Vector2d a, Vector2d b, double t) {
         return a.plus((b.minus(a)).times(t));
     }
@@ -59,6 +61,7 @@ public class SplineGenerator {
         Vector2d p1 = quadraticLerp(b, c, d, t);
         return vectorLerp(p0, p1, t);
     }
+    // ---
 
 
     public Path2d getSpline() {

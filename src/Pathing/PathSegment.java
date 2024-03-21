@@ -1,8 +1,6 @@
-package Pathing;
+package nikorunnerlib.src.Pathing;
 
-import java.util.ArrayList;
-
-import Geometry.*;
+import nikorunnerlib.src.Geometry.*;
 
 public class PathSegment {
     
@@ -18,7 +16,7 @@ public class PathSegment {
         return tangent;
     }
 
-    public Pose2d getEndPose() {
+    public Pose2d getPose() {
         return pose;
     }
 }
