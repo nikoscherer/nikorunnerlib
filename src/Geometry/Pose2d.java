@@ -63,6 +63,15 @@ public class Pose2d {
         this.y = y;
         this.heading = heading;
     }
+
+    public void setPose(Pose2d pose) {
+        this.x = pose.getX();
+        this.y = pose.getY();
+        this.heading = pose.getHeading();
+
+        // dont think is needed
+        pose = null;
+    }
     
 
 }

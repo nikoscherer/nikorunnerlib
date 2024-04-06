@@ -2,7 +2,6 @@ package nikorunnerlib.src.Pathing;
 import java.util.ArrayList;
 
 import nikorunnerlib.src.Geometry.*;
-import nikorunnerlib.src.Other.*;
 
 public class SplineGenerator {
     double waypoints = 40;
