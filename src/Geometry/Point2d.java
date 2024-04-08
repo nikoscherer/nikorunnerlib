@@ -9,6 +9,10 @@ public class Point2d {
         this.y = y;
     }
 
+    public Point2d() {
+        
+    }
+
 
     public double getX() {
         return x;
