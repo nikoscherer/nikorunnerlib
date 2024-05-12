@@ -2,7 +2,9 @@ package nikorunnerlib.src.Pathing;
 
 import java.util.ArrayList;
 
+
 import nikorunnerlib.src.Geometry.*;
+
 
 public class Path {
     ArrayList<PathSegment> pathSegments;

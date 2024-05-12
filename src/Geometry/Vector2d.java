@@ -99,7 +99,7 @@ public class Vector2d {
 
     /**
      * 
-     * @param driection Set the direction of this vector.
+     * @param direction Set the direction of this vector.
      */
     public void setDirection(double direction) {
         this.direction = direction;

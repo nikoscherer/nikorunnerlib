@@ -1,10 +1,15 @@
 package nikorunnerlib.src.Pathing;
+
 import java.util.ArrayList;
 
+import GUI.Spline;
 import nikorunnerlib.src.Geometry.*;
 
+
+
 public class SplineGenerator {
-    double waypoints = 40;
+    
+    double waypoints = 20;
     double lerpMultiplier = 1 / waypoints;
 
     final double defaultTanDistance = 5;
@@ -13,7 +18,7 @@ public class SplineGenerator {
     ArrayList<Point2d> splinePoints = new ArrayList<>();
     Path2d spline;
 
-    SplineGenerator(Pose2d startPose, Vector2d startTangent, Vector2d endTangent, Pose2d endPose) {
+    public SplineGenerator(Pose2d startPose, Vector2d startTangent, Vector2d endTangent, Pose2d endPose) {
 
         // Edit P1 and P2 (tangents) to create a spline that goes between those points instead.
 
@@ -33,8 +38,8 @@ public class SplineGenerator {
         int n = 0;
         for (double t = lerpMultiplier; !(t > 1); t = t + lerpMultiplier) {
             splinePoints.add(cubicLerp(startVector, startTangent, endTangent, endVector, t).toPoint2d());
-            System.out.print("(" + splinePoints.get(n).getX() + ",");
-            System.out.print(splinePoints.get(n).getY() + ")" + ",");
+            // System.out.print("(" + splinePoints.get(n).getX() + ",");
+            // System.out.print(splinePoints.get(n).getY() + ")" + ",");
             n++;
         }
 
@@ -45,22 +50,31 @@ public class SplineGenerator {
 
 
     // From PathPlanner
-    public Vector2d vectorLerp(Vector2d a, Vector2d b, double t) {
+    public static Vector2d vectorLerp(Vector2d a, Vector2d b, double t) {
         return a.plus((b.minus(a)).times(t));
     }
 
-    public Vector2d quadraticLerp(Vector2d a, Vector2d b, Vector2d c, double t) {
+    public static Vector2d quadraticLerp(Vector2d a, Vector2d b, Vector2d c, double t) {
         Vector2d p0 = vectorLerp(a, b, t);
         Vector2d p1 = vectorLerp(b, c, t);
         return vectorLerp(p0, p1, t);
     }
 
-    public Vector2d cubicLerp(Vector2d a, Vector2d b, Vector2d c, Vector2d d, double t) {
+    public static Vector2d cubicLerp(Vector2d a, Vector2d b, Vector2d c, Vector2d d, double t) {
         Vector2d p0 = quadraticLerp(a, b, c, t);
         Vector2d p1 = quadraticLerp(b, c, d, t);
         return vectorLerp(p0, p1, t);
     }
     // ---
+
+    public double calculateTotalLength(ArrayList<Point2d> points) {
+        double totalDistance = 0;
+        for(int i = 0; i < points.size() - 1; i++) {
+            totalDistance += points.get(i).toVector2d().getDistance(points.get(i + 1).toVector2d());
+        }
+
+        return totalDistance;
+    }
 
 
     public Path2d getSpline() {
