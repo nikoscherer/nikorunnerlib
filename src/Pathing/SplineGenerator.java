@@ -2,14 +2,13 @@ package nikorunnerlib.src.Pathing;
 
 import java.util.ArrayList;
 
-import GUI.Spline;
 import nikorunnerlib.src.Geometry.*;
 
 
 
 public class SplineGenerator {
     
-    double waypoints = 20;
+    double waypoints = 250;
     double lerpMultiplier = 1 / waypoints;
 
     final double defaultTanDistance = 5;
@@ -35,12 +34,10 @@ public class SplineGenerator {
 
         splinePoints.add(startVector.toPoint2d());
 
-        int n = 0;
         for (double t = lerpMultiplier; !(t > 1); t = t + lerpMultiplier) {
             splinePoints.add(cubicLerp(startVector, startTangent, endTangent, endVector, t).toPoint2d());
             // System.out.print("(" + splinePoints.get(n).getX() + ",");
             // System.out.print(splinePoints.get(n).getY() + ")" + ",");
-            n++;
         }
 
         splinePoints.add(endVector.toPoint2d());
